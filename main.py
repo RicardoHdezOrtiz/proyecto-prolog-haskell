@@ -31,8 +31,6 @@ def iniciar_sistema_experto():
 
     sintomas = entrada.split()
     
-    # Preparamos el comando para llamar a Prolog. 
-    # El "--" al final le indica a Prolog que lo que sigue son argumentos del usuario.
     comando = ["swipl", "-q", "-s", "experto.pl", "-g", "consultar", "--"] + sintomas
     
     try:
@@ -42,6 +40,35 @@ def iniciar_sistema_experto():
         print("="*50)
     except Exception as e:
         print(f"❌ Error al ejecutar Prolog: {e}")
+
+def iniciar_calculadora():
+    print("\n--- CALCULADORA ANALÍTICA (HASKELL) ---")
+    print("Operaciones disponibles:")
+    print("1. Factorial de un número")
+    print("2. Serie de Fibonacci (posición n)")
+    print("3. Saber si un número es primo")
+    
+    op = input("Selecciona una operación (1-3): ").strip()
+    
+    operaciones = {'1': 'factorial', '2': 'fibonacci', '3': 'primo'}
+    if op not in operaciones:
+        print("⚠️ Operación inválida.")
+        return
+        
+    num = input("Ingresa un número entero positivo: ").strip()
+    if not num.isdigit():
+        print("⚠️ Debes ingresar un número entero válido.")
+        return
+        
+    comando = ["runghc", "calculadora.hs", operaciones[op], num]
+    
+    try:
+        resultado = subprocess.run(comando, capture_output=True, text=True)
+        print("\n" + "="*50)
+        print(f"RESULTADO: {resultado.stdout.strip()}")
+        print("="*50)
+    except Exception as e:
+        print(f"❌ Error al ejecutar Haskell: {e}")
 
 def menu_principal():
     while True:
@@ -58,7 +85,7 @@ def menu_principal():
         elif opcion == '2':
             iniciar_sistema_experto()
         elif opcion == '3':
-            print("\n⚙️ Opción en desarrollo... (Falta conectar Haskell)")
+            iniciar_calculadora()
         elif opcion == '4':
             print("Saliendo del programa. ¡Adiós!")
             sys.exit()
