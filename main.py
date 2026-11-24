@@ -2,7 +2,6 @@ import subprocess
 import sys
 from datetime import datetime
 
-# Códigos ANSI para colores en terminal (sin librerías externas)
 RESET   = "\033[0m"
 BOLD    = "\033[1m"
 ROJO    = "\033[91m"

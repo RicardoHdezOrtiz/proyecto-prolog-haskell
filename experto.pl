@@ -1,10 +1,5 @@
-% ==========================================
-% SISTEMA EXPERTO: Diagnóstico Dinámico de PC
-% ==========================================
 :- dynamic tiene_sintoma/1.
 
-% 1. BASE DE CONOCIMIENTOS
-% Estructura: diagnostico(Falla, Urgencia, Solucion).
 
 diagnostico(falla_fuente_poder, 'CRITICA', 'Revisa el cable de corriente y prueba la fuente de poder con un puente o multimetro.') :-
     tiene_sintoma(pc_no_enciende),
