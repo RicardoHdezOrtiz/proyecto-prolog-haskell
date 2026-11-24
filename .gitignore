@@ -1,0 +1,5 @@
+__pycache__/
+*.hi
+*.o
+historial_sesion.txt
+.DS_Store
