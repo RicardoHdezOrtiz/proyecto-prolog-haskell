@@ -47,9 +47,9 @@ def probar_conexion():
                         ("Haskell (runghc)", ["runghc", "--version"])]:
         try:
             subprocess.run(cmd, capture_output=True, check=True)
-            print(f"{VERDE}✅ {nombre} conectado correctamente.{RESET}")
+            print(f"{VERDE} {nombre} conectado correctamente.{RESET}")
         except Exception:
-            print(f"{ROJO}❌ Error: No se encontró {nombre}.{RESET}")
+            print(f"{ROJO} Error: No se encontró {nombre}.{RESET}")
 
 
 def color_urgencia(nivel):
@@ -84,7 +84,7 @@ def iniciar_sistema_experto():
             print(f"{AMARILLO}⚠️ Número ignorado por inválido: '{token}'{RESET}")
 
     if not seleccionados:
-        print(f"{ROJO}❌ No hubo síntomas válidos para diagnosticar.{RESET}")
+        print(f"{ROJO} No hubo síntomas válidos para diagnosticar.{RESET}")
         return
 
     comando = ["swipl", "-q", "-s", "experto.pl", "-g", "consultar", "--"] + seleccionados
@@ -93,10 +93,10 @@ def iniciar_sistema_experto():
         resultado = subprocess.run(comando, capture_output=True, text=True, check=True)
         salida = resultado.stdout.strip()
     except FileNotFoundError:
-        print(f"{ROJO}❌ Error: 'swipl' no está instalado o no está en el PATH.{RESET}")
+        print(f"{ROJO} Error: 'swipl' no está instalado o no está en el PATH.{RESET}")
         return
     except Exception as e:
-        print(f"{ROJO}❌ Error al ejecutar Prolog: {e}{RESET}")
+        print(f"{ROJO} Error al ejecutar Prolog: {e}{RESET}")
         return
 
     print("\n" + "=" * 65)
@@ -145,13 +145,13 @@ def iniciar_calculadora():
     }
 
     if op not in operaciones:
-        print(f"{AMARILLO}⚠️ Operación inválida.{RESET}")
+        print(f"{AMARILLO} Operación inválida.{RESET}")
         return
 
     nombre_op, prompt = operaciones[op]
     entrada = input(prompt).strip()
     if not entrada:
-        print(f"{AMARILLO}⚠️ No ingresaste valores.{RESET}")
+        print(f"{AMARILLO} No ingresaste valores.{RESET}")
         return
 
     argumentos = entrada.split()
@@ -161,13 +161,13 @@ def iniciar_calculadora():
         resultado = subprocess.run(comando, capture_output=True, text=True)
         salida = resultado.stdout.strip()
         if not salida and resultado.stderr:
-            print(f"{ROJO}❌ Error de Haskell: {resultado.stderr.strip()}{RESET}")
+            print(f"{ROJO} Error de Haskell: {resultado.stderr.strip()}{RESET}")
             return
     except FileNotFoundError:
-        print(f"{ROJO}❌ Error: 'runghc' no está instalado o no está en el PATH.{RESET}")
+        print(f"{ROJO} Error: 'runghc' no está instalado o no está en el PATH.{RESET}")
         return
     except Exception as e:
-        print(f"{ROJO}❌ Error al ejecutar Haskell: {e}{RESET}")
+        print(f"{ROJO} Error al ejecutar Haskell: {e}{RESET}")
         return
 
     print("\n" + "=" * 65)
@@ -196,7 +196,7 @@ def ver_o_exportar_historial():
                 f.write(f"{idx}. [{item['fecha']}] [{item['modulo']}]\n")
                 f.write(f"   Entrada:   {item['entrada']}\n")
                 f.write(f"   Resultado: {item['salida']}\n\n")
-        print(f"{VERDE}✅ Historial guardado en '{nombre_archivo}'.{RESET}")
+        print(f"{VERDE} Historial guardado en '{nombre_archivo}'.{RESET}")
 
 
 def menu_principal():

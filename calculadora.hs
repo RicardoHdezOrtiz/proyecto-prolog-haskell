@@ -5,6 +5,8 @@ import System.Environment (getArgs)
 import Text.Read (readMaybe)
 import Text.Printf (printf)
 
+-- === [4. RECURSIVIDAD PURA, GUARDAS Y EVALUACION PEREZOSA] ===
+-- Sin ciclos for/while: recursividad (Factorial/MCD), guardas (Primos) y lista infinita (Fibonacci)
 -- 1. Factorial (Recursividad)
 factorial :: Integer -> Integer
 factorial 0 = 1
@@ -41,7 +43,8 @@ estadisticas xs =
     in printf "Cantidad: %d | Suma: %.2f | Promedio: %.2f | Min: %.2f | Max: %.2f"
               (length xs) suma promedio minimo maximo
 
--- Evaluador de comandos desde terminal
+-- === [5. ENTRADA POR CONSOLA (getArgs) Y MANEJO SEGURO (Maybe)] ===
+-- Si el usuario mete letras en vez de numeros, readMaybe devuelve Nothing sin tronar
 evaluar :: [String] -> String
 evaluar ["factorial", val] =
     case readMaybe val :: Maybe Integer of

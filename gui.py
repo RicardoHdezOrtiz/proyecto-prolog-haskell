@@ -23,13 +23,14 @@ SINTOMAS = [
     ("hora_desconfigurada", "Hora y fecha desconfiguradas"),
 ]
 
+# Sincronizado 100% con calculadora.hs
 OPERACIONES_HASKELL = {
-    "Factorial (n)": ("factorial", "Número entero positivo (ej. 6):"),
-    "Fibonacci (primeros n)": ("fibonacci", "Cantidad de términos (ej. 10):"),
-    "Filtrar pares (lista)": ("pares", "Números separados por coma (ej. 1,2,3,4,5,6):"),
-    "Suma acumulada / foldl (lista)": ("suma", "Números separados por coma (ej. 10,20,30):"),
-    "MCD Euclides (a, b)": ("mcd", "Dos números separados por coma (ej. 48,18):"),
-    "Promedio seguro / Maybe (lista)": ("promedio", "Números separados por coma (ej. 8.5,9.0,10):"),
+    "Factorial (n)": ("factorial", "Número entero >= 0 (ej. 6):"),
+    "Fibonacci en posición (n)": ("fibonacci", "Posición entera >= 0 (ej. 10):"),
+    "Verificar si es primo (n)": ("primo", "Número entero (ej. 17):"),
+    "Listar primos hasta (n)": ("primos_hasta", "Límite entero >= 2 (ej. 30):"),
+    "MCD Euclides (a b)": ("mcd", "Dos enteros separados por espacio (ej. 48 18):"),
+    "Estadísticas de lista": ("estadisticas", "Números separados por espacio (ej. 8.5 9.0 10 4.5):"),
 }
 
 
@@ -124,7 +125,7 @@ class AppMultiparadigma:
         self.combo_op.pack(anchor="w", padx=15)
         self.combo_op.bind("<<ComboboxSelected>>", self._actualizar_ayuda_haskell)
 
-        self.lbl_ayuda_hs = ttk.Label(parent, text="Número entero positivo (ej. 6):")
+        self.lbl_ayuda_hs = ttk.Label(parent, text="Número entero >= 0 (ej. 6):")
         self.lbl_ayuda_hs.pack(anchor="w", padx=15, pady=(12, 4))
 
         self.entry_hs = tk.Entry(parent, font=("Menlo", 12), bg="#313244", fg="#cdd6f4", insertbackground="white", relief="flat", width=42)
@@ -189,6 +190,8 @@ class AppMultiparadigma:
             messagebox.showwarning("Sin síntomas", "Selecciona al menos un síntoma para diagnosticar.")
             return
 
+        # === [1. ORQUESTADOR PYTHON -> PROLOG] ===
+        # Envia sintomas por terminal (subprocess) y atrapa la respuesta (stdout)
         try:
             comando = ["swipl", "-q", "-s", ARCHIVO_PROLOG, "-g", "consultar", "--"] + seleccionados
             res = subprocess.run(
@@ -214,8 +217,11 @@ class AppMultiparadigma:
             return
 
         try:
+            # === [2. ORQUESTADOR PYTHON -> HASKELL] ===
+            # Separa los parametros y ejecuta el calculo puro en GHC
+            argumentos = parametro.replace(",", " ").split()
             res = subprocess.run(
-                ["runghc", ARCHIVO_HASKELL, comando, parametro],
+                ["runghc", ARCHIVO_HASKELL, comando] + argumentos,
                 capture_output=True,
                 text=True,
                 check=False,
@@ -223,7 +229,7 @@ class AppMultiparadigma:
             salida = res.stdout.strip() or res.stderr.strip() or "Sin respuesta de Haskell."
             self.txt_haskell.delete("1.0", "end")
             self.txt_haskell.insert("end", salida)
-            self._registrar_historial("Haskell", f"{comando} {parametro}", salida)
+            self._registrar_historial("Haskell", f"{comando} {' '.join(argumentos)}", salida)
         except FileNotFoundError:
             messagebox.showerror("Error", "No se encontró 'runghc' en el PATH del sistema.")
 
